@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Serviciul pentru API
+  api:
+    build:
+      context: .
+      dockerfile: BitByBit.API/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Database=bitbybit;Username=postgres;Password=postgres
+    depends_on:
+      - db
+    networks:
+      - bitbybit-network
+
+  # Serviciul pentru baza de date PostgreSQL
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=bitbybit
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - bitbybit-network
+
+# Definim volume-ul pentru a persista datele bazei de date
+volumes:
+  postgres-data:
+
+# Definim rețeaua pentru comunicarea între containere
+networks:
+  bitbybit-network:
+    driver: bridge 
