@@ -1,0 +1,6 @@
+@BitByBit.API_HostAddress = http://localhost:5172
+
+GET {{BitByBit.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
