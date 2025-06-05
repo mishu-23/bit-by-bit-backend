@@ -15,6 +15,8 @@ namespace BitByBit.API.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<PlayerStats> PlayerStats { get; set; }
+        public DbSet<CharacterGrid> CharacterGrids { get; set; }
+        public DbSet<GridCell> GridCells { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,17 @@ namespace BitByBit.API.Data
                 .HasMany(i => i.InventoryItems)
                 .WithOne(ii => ii.Item)
                 .HasForeignKey(ii => ii.ItemId);
+
+            // Configure CharacterGrid relationships
+            modelBuilder.Entity<CharacterGrid>()
+                .HasOne(cg => cg.Player)
+                .WithMany()
+                .HasForeignKey(cg => cg.PlayerId);
+
+            modelBuilder.Entity<GridCell>()
+                .HasOne(gc => gc.CharacterGrid)
+                .WithMany(cg => cg.Cells)
+                .HasForeignKey(gc => gc.CharacterGridId);
         }
     }
 } 
